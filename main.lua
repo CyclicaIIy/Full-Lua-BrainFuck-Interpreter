@@ -66,7 +66,7 @@ while ptr < #codeInstructions do
                 index = index + codeInstructions[ptr]:sub(1, #codeInstructions[ptr]-1)
         elseif codeInstructions[ptr]:sub(#codeInstructions[ptr]) == "<" then
             for i = 1, codeInstructions[ptr]:sub(1, #codeInstructions[ptr]-1) do
-               index = index - 1
+                index = index - 1
             end
         elseif codeInstructions[ptr]:sub(#codeInstructions[ptr]) == "." then
             for i = 1, codeInstructions[ptr]:sub(1, #codeInstructions[ptr]-1) do
