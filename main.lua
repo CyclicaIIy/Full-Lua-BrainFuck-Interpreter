@@ -9,7 +9,7 @@ local file, ptr, savedPtrs, ptrCount, index, cells = io.open(fileName, "r"), 1, 
 if not file then error("File "..fileName.." not found.",0) end
 local code, codeInstructions = file:read("*a"):gsub("[^][<>+--,.]",""), {} -- strips all characters that aren't instructions
 
--- compresses brainfuck code with run-length encoding; this prevents iteration through the same instruction
+-- compresses brainfuck code with run-length encoding; this prevents iterating through the same instruction as the interpreter runs brainfuck code that's been compressed with RLE to run much more efficiently
 for char in code:gmatch(".") do 
     if char:match("[^][]") then
         code = code:gsub(char:gsub("[%.%+%-]","%%%0"):rep(2).."+",function(match)
@@ -27,7 +27,7 @@ for char in code:gmatch(".") do
     end
 end
 
--- the interpreter runs brainfuck code that's been compressed with RLE to run much more efficiently
+-- main interpreter code
 while ptr < #codeInstructions do
 	if codeInstructions[ptr]:sub(#codeInstructions[ptr]) == "[" then
 		if cells[index] == 0 then
