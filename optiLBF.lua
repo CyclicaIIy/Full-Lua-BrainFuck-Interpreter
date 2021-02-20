@@ -26,6 +26,7 @@ return function(code)
 			end
 		end
 	end
+
 	-- the interpreter runs brainfuck code that's been compressed with RLE to increase efficiency
 	while ptr < #codeInstructions do
 		local currentInstruction = string.sub(codeInstructions[ptr], #codeInstructions[ptr])
@@ -47,34 +48,24 @@ return function(code)
 			end
 		elseif ptrCount <= 0 then
 			if currentInstruction == "+" then
-				for i = 1, string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1) do
-					if cells[index] >= 255 then
-						cells[index] = 0
-					else
-						cells[index] = cells[index] + 1
-					end
+				cells[index] = cells[index] + string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1)
+				if cells[index] > 255 then
+					cells[index] = 0
 				end
 			elseif currentInstruction == "-" then
-				for i = 1, string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1) do
-					if cells[index] > 0 then
-						cells[index] = cells[index] - 1
-					else
-						cells[index] = 255
-					end
+				cells[index] = cells[index] - string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1)
+				if cells[index] < 0 then
+					cells[index] = 255
 				end
 			elseif currentInstruction == ">" then
-					index = index + string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1)
+				index = index + string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1)
 			elseif currentInstruction == "<" then
-				for i = 1, string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1) do
-					index = index - 1
-				end
+				index = index - string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1)
 			elseif currentInstruction == "." then
-				for i = 1, string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1) do
-					io.write(string.char(cells[index]))
-				end
+				io.write(string.rep(string.char(cells[index]), string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1)))
 			elseif currentInstruction == "," then
 				for i = 1, string.sub(codeInstructions[ptr], 1, #codeInstructions[ptr]-1) do
-				cells[index] = tonumber(string.byte(io.read()))
+					cells[index] = string.byte(io.read())
 				end
 			end
 		end
